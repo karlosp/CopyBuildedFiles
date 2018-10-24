@@ -74,11 +74,7 @@ std::vector<ProjectPath> get_project_paths(fs::path const& product_bat_path)
         project_path.project_relative_path = base_sub_match.str();
 
         // For NET project adds bin folder
-        static const std::string csproj_needle = "csproj";
-        static const auto boyer_moore_searcher =
-          std::boyer_moore_searcher(csproj_needle.begin(), csproj_needle.end());
-        auto it = std::search(line.begin(), line.end(), boyer_moore_searcher);
-        if (it != line.end())
+        if (line.find("csproj") != std::string::npos)
         {
           project_path.project_relative_path.append("bin");
         }
