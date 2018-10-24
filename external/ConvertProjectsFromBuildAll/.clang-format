@@ -1,0 +1,8 @@
+BasedOnStyle: "Google"
+BreakBeforeBraces: Allman
+AccessModifierOffset: -2
+DerivePointerAlignment: false
+PointerBindsToType: true
+AlignAfterOpenBracket: AlwaysBreak
+ContinuationIndentWidth: 2
+ColumnLimit: 100

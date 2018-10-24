@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.1)
+add_subdirectory(json)
+add_subdirectory(spdlog)
+add_subdirectory(expected)
+add_subdirectory(ConvertProjectsFromBuildAll)
