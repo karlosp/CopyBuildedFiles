@@ -11,7 +11,6 @@ std::vector<fs::path> ConvertProjectsFromBuildAll::get_BuildAll_bats(fs::path co
 {
   std::vector<fs::path> bat_paths;
 
-  // const std::regex txt_regex("^call .*set_var_(Rel.*x64)\.bat");
   const std::regex txt_regex(R"(^call (C:\\SVN2017\\Install\\ARX\\.*x64\.bat))");
   std::smatch base_match;
 

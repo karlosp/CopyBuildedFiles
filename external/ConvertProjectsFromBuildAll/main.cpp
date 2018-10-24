@@ -34,6 +34,10 @@ std::string replace_all(
 }
 }  // namespace
 
+/*----------------------------------------------------
+  This is auxiliary project to parse projects from 
+  existing .bat files 
+------------------------------------------------------*/
 int main()
 {
   std::vector<cpfba::BuildAllFiles> all_files{
@@ -42,6 +46,7 @@ int main()
 
   for (const auto& all_file : all_files)
   {
+    std::cout << all_file.build_all << "\n\n";
     auto result = cpfba::get_BuildAll_bats(all_file.build_all);
     for (auto const& res : result)
     {
@@ -63,7 +68,7 @@ int main()
                   << "\n";
       }
     }
-    std::cout << "\n";
+    std::cout << "\n\n";
   }
 
   return 0;
