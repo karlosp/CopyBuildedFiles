@@ -14,12 +14,12 @@ add_subdirectory(external)
 #-------------------
 set(PSD ${PROJECT_SOURCE_DIR})
 set(HEADER_FILES  ${PSD}/include/CopyBuildedFiles/CopyBuildedFiles.hpp
-                  ${PSD}/include/CopyBuildedFiles/utils.hpp
+                 # ${PSD}/include/CopyBuildedFiles/utils.hpp
                   ${PSD}/StdAfx.h
                   )
                   
 set(SOURCE_FILES  ${PSD}/src/CopyBuildedFiles.cpp
-                  ${PSD}/src/utils.cpp
+                 # ${PSD}/src/utils.cpp
                   ${PSD}/StdAfx.cpp
                   ${PSD}/main.cpp 
                   )

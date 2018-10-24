@@ -1,84 +1,112 @@
 #pragma once
 #include "StdAfx.h"
 
-namespace cbf {
+namespace cbf
+{
 using nlohmann::json;
 namespace fs = std::filesystem;
-// Generated from https://app.quicktype.io/
 
-inline json get_untyped(const json& j, const char* property) {
-  if (j.find(property) != j.end()) {
+inline json get_untyped(const json& j, const char* property)
+{
+  if (j.find(property) != j.end())
+  {
     return j.at(property).get<json>();
   }
   return json();
 }
 
-struct Platform {
-  std::string name;
-  fs::path src_root_path;
-  std::string build_folder_name;
-  bool use_default_projects;
-  std::vector<fs::path> platform_specific_files;
-  fs::path dst_folder_path;
+struct DefaultProjects
+{
+  std::vector<std::string> projects;
 };
 
-struct Product {
-  std::string name;
+struct Platform
+{
+  fs::path src_root_path;
+  std::vector<fs::path> build_folder_names;
+  std::vector<fs::path> platform_specific_files;
+  fs::path dst_folder_path;
+  bool use_default_projects;
+};
+
+struct Product
+{
   std::vector<Platform> platforms;
 };
 
-struct CopyBuildedFiles {
-  std::vector<Product> products;
-  std::vector<std::string> default_projects;
+struct CopyBuildedFiles
+{
+  //std::unordered_map<std::string, Platform> platforms;
+  std::unordered_map<std::string, DefaultProjects> default_projects;
+  std::unordered_map<std::string, Product> products;
 };
 
-inline void from_json(const json& _j, cbf::Platform& _x) {
-  _x.name = _j.at("name").get<std::string>();
-  _x.src_root_path = _j.at("src_root_path").get<std::string>();
-  _x.build_folder_name = _j.at("build_folder_name").get<std::string>();
-  _x.use_default_projects = _j.at("use_default_projects").get<bool>();
-  for (auto const& p : _j.at("platform_specific_files").get<std::vector<std::string>>())
+inline void from_json(const json& j, cbf::Platform& platform)
+{
+  platform.src_root_path = j.at("src_root_path").get<std::string>();
+  platform.use_default_projects = j.at("use_default_projects").get<bool>();
+
+  for (const auto& build_folder_name : j.at("build_folder_names").get<std::vector<std::string>>())
   {
-    _x.platform_specific_files.emplace_back(p);
+    platform.build_folder_names.push_back(build_folder_name);
   }
-  _x.dst_folder_path = _j.at("dst_folder_path").get<std::string>();
+
+  for (auto const& platform_specific_file :
+       j.at("platform_specific_files").get<std::vector<std::string>>())
+  {
+    platform.platform_specific_files.emplace_back(platform_specific_file);
+  }
+  platform.dst_folder_path = j.at("dst_folder_path").get<std::string>();
 }
 
-//inline void to_json(json& _j, const cbf::Platform& _x) {
-//  _j = json::object();
-//  _j["name"] = _x.name;
-//  _j["src_root_path"] = _x.src_root_path;
-//  _j["build_folder_name"] = _x.build_folder_name;
-//  _j["use_default_projects"] = _x.use_default_projects;
-//  _j["platform_specific_files"] = _x.platform_specific_files;
-//  _j["dst_folder_path"] = _x.dst_folder_path;
-//}
-
-inline void from_json(const json& _j, cbf::Product& _x) {
-  _x.name = _j.at("name").get<std::string>();
-  _x.platforms = _j.at("platforms").get<std::vector<cbf::Platform>>();
+inline void from_json(const json& j, cbf::DefaultProjects& default_project)
+{
+  default_project.projects.assign(j.begin(), j.end());
 }
 
-//inline void to_json(json& _j, const cbf::Product& _x) {
-//  _j = json::object();
-//  _j["name"] = _x.name;
-//  _j["platforms"] = _x.platforms;
-//}
+inline void from_json(const json& j, cbf::Product& product) {
 
-inline void from_json(const json& _j, cbf::CopyBuildedFiles& _x) {
-  _x.products = _j.at("products").get<std::vector<cbf::Product>>();
-  _x.default_projects =
-      _j.at("default_projects").get<std::vector<std::string>>();
+int a = 0; }
+
+inline void from_json(const json& root, cbf::CopyBuildedFiles& cbf)
+{
+  //const auto platforms = root["platforms"];
+  //for (auto default_project = platforms.cbegin(); default_project != platforms.cend();
+  //     ++default_project)
+  //{
+  //  // std::cout << default_project.key() << "\n";
+  //  from_json(default_project.value(), cbf.platforms[default_project.key()]);
+  //}
+
+  const auto default_projects = root["default_projects"];
+  for (auto default_project = default_projects.cbegin(); default_project != default_projects.cend();
+       ++default_project)
+  {
+    // std::cout << default_project.key() << "\n";
+    from_json(default_project.value(), cbf.default_projects[default_project.key()]);
+  }
+
+  const auto products = root["products"];
+  for (auto product = products.cbegin(); product != products.cend(); ++product)
+  {
+     std::cout << product.key() << "\n";
+    const auto product_platforms = product.value().at("platforms");
+
+    for (auto product_platform = product_platforms.cbegin();
+         product_platform != product_platforms.cend(); ++product_platform)
+    {
+      cbf::Platform platform;
+      from_json(product_platform.value(), platform);
+      cbf.products[product.key()].platforms.emplace_back(std::move(platform));
+      //from_json(product.value(), cbf.products[product.key()]);
+      //cbf.products[product.key()].platforms.push_back(&cbf.platforms.at(product_platform.key()));
+    }
+  }
 }
-
-//inline void to_json(json& _j, const cbf::CopyBuildedFiles& _x) {
-//  _j = json::object();
-//  _j["products"] = _x.products;
-//  _j["default_projects"] = _x.default_projects;
-//}
 
 // Check if all source files exists
-tl::expected<bool, std::vector<std::filesystem::path>> check_sources(const cbf::CopyBuildedFiles& cbf);
+tl::expected<bool, std::vector<std::filesystem::path>> check_sources(
+  const cbf::CopyBuildedFiles& cbf);
 
 inline void copy(const cbf::CopyBuildedFiles& cbf);
 }  // namespace cbf
