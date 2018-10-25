@@ -4,6 +4,7 @@
 #include <regex>
 #include <sstream>
 #include <string>
+#include <algorithm>
 
 namespace ConvertProjectsFromBuildAll
 {
@@ -82,6 +83,18 @@ std::vector<ProjectPath> get_project_paths(fs::path const& product_bat_path)
       }
     }
   }
+
+  // Remove duplicate
+  std::sort(project_paths.begin(), project_paths.end(),[](auto const& lhs, auto const& rhs){
+      return lhs.project_relative_path < rhs.project_relative_path;
+    });
+  project_paths.erase(
+    std::unique(
+      project_paths.begin(), project_paths.end(),
+      [](auto const& lhs, auto const& rhs) {
+        return lhs.project_relative_path == rhs.project_relative_path;
+      }),
+    project_paths.end());
   return project_paths;
 }
 

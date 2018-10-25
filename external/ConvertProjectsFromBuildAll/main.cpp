@@ -64,10 +64,11 @@ int main()
         {
           extension = "dll";
         }
-        std::cout << fmt::format("\t{}\t", project_path.build_folder_name)
-                  << fmt::format(R"("{}\\*\\*.{}",)", project_relative_path, extension)
-                  << "\n";/*std::cout << "\t" << fmt::format(R"("{}\\*\\*.{}",)", project_relative_path, extension)
-                  << "\n";*/
+        /* std::cout << fmt::format("\t{}\t", project_path.build_folder_name)
+                   << fmt::format(R"("{}\\*\\*.{}",)", project_relative_path, extension)
+                   << "\n";*/
+        std::cout << "\t" << fmt::format(R"("{}\\*\\*.{}",)", project_relative_path, extension)
+                  << "\n";
       }
     }
     std::cout << "\n\n";
