@@ -36,7 +36,6 @@ struct Product
 
 struct CopyBuildedFiles
 {
-  //std::unordered_map<std::string, Platform> platforms;
   std::unordered_map<std::string, DefaultProjects> default_projects;
   std::unordered_map<std::string, Product> products;
 };
@@ -64,20 +63,10 @@ inline void from_json(const json& j, cbf::DefaultProjects& default_project)
   default_project.projects.assign(j.begin(), j.end());
 }
 
-inline void from_json(const json& j, cbf::Product& product) {
-
-int a = 0; }
+inline void from_json(const json& j, cbf::Product& product) { int a = 0; }
 
 inline void from_json(const json& root, cbf::CopyBuildedFiles& cbf)
 {
-  //const auto platforms = root["platforms"];
-  //for (auto default_project = platforms.cbegin(); default_project != platforms.cend();
-  //     ++default_project)
-  //{
-  //  // std::cout << default_project.key() << "\n";
-  //  from_json(default_project.value(), cbf.platforms[default_project.key()]);
-  //}
-
   const auto default_projects = root["default_projects"];
   for (auto default_project = default_projects.cbegin(); default_project != default_projects.cend();
        ++default_project)
@@ -89,7 +78,7 @@ inline void from_json(const json& root, cbf::CopyBuildedFiles& cbf)
   const auto products = root["products"];
   for (auto product = products.cbegin(); product != products.cend(); ++product)
   {
-     std::cout << product.key() << "\n";
+    std::cout << product.key() << "\n";
     const auto product_platforms = product.value().at("platforms");
 
     for (auto product_platform = product_platforms.cbegin();
@@ -98,22 +87,33 @@ inline void from_json(const json& root, cbf::CopyBuildedFiles& cbf)
       cbf::Platform platform;
       from_json(product_platform.value(), platform);
       cbf.products[product.key()].platforms.emplace_back(std::move(platform));
-      //from_json(product.value(), cbf.products[product.key()]);
-      //cbf.products[product.key()].platforms.push_back(&cbf.platforms.at(product_platform.key()));
+      // from_json(product.value(), cbf.products[product.key()]);
+      // cbf.products[product.key()].platforms.push_back(&cbf.platforms.at(product_platform.key()));
     }
   }
 }
 
-
-struct ErrorReport
+struct CopyReport
 {
+  struct FromTo
+  {
+    fs::path from;
+    fs::path to;
+  };
+  std::vector<FromTo> succeeded;
+  std::vector<fs::path> failed;
   std::vector<fs::path> non_existing_sources;
-  std::vector<fs::path> copy_failed;
+};
+
+enum class CopyMode
+{
+  ONLY_CHECK_SOURCES,
+  COPY_AND_CHECK_COURCES
 };
 
 // Check if all source files exists, if not, returns paths of those who do not exists
-tl::expected<bool, std::vector<std::filesystem::path>> check_sources(
-  const cbf::CopyBuildedFiles& cbf);
+CopyReport copy_check_sources(
+  const cbf::CopyBuildedFiles& cbf, std::shared_ptr<spdlog::logger> logger,
+  cbf::CopyMode copy_mode = CopyMode::COPY_AND_CHECK_COURCES);
 
-tl::expected<bool, ErrorReport> copy(const cbf::CopyBuildedFiles& cbf);
 }  // namespace cbf

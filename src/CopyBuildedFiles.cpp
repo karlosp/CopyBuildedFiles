@@ -86,21 +86,24 @@ std::vector<fs::path> list_wildcard_files(fs::path const& path)
   return files;
 }
 
-tl::expected<bool, std::vector<std::filesystem::path>> cbf::check_sources(
-  const cbf::CopyBuildedFiles& cbf)
+cbf::CopyReport cbf::copy_check_sources(
+  const cbf::CopyBuildedFiles& cbf, std::shared_ptr<spdlog::logger> logger, cbf::CopyMode copy_mode)
 {
-  std::vector<fs::path> non_existing_sources;
+  CopyReport cr;
 
   for (const auto& product : cbf.products)
   {
     for (const auto& platform : product.second.platforms)
     {
+      std::vector<fs::path> files_to_be_copied;
+      // Check for platform root
       if (!safe_exists(platform.src_root_path))
       {
-        non_existing_sources.push_back(platform.src_root_path);
+        cr.non_existing_sources.push_back(platform.src_root_path);
         continue;
       }
 
+      // Check for specific files
       for (const auto& plaform_specific_file : platform.platform_specific_files)
       {
         const auto absolute_path = platform.src_root_path / plaform_specific_file;
@@ -108,7 +111,14 @@ tl::expected<bool, std::vector<std::filesystem::path>> cbf::check_sources(
 
         if (full_path.empty())
         {
-          non_existing_sources.push_back(absolute_path);
+          cr.non_existing_sources.push_back(absolute_path);
+        }
+        else
+        {
+          if (copy_mode == CopyMode::COPY_AND_CHECK_COURCES)
+          {
+            std::copy(full_path.begin(), full_path.end(), std::back_inserter(files_to_be_copied));
+          }
         }
       }
 
@@ -150,119 +160,50 @@ tl::expected<bool, std::vector<std::filesystem::path>> cbf::check_sources(
             build_folder_names.pop_back();
 
             // E.g.: \\v-w1064u-bld7\SVN2017\CGSA_TC\ARX\TC_SweptPath\Rel14u3x64,RelC2018x64
-            non_existing_sources.push_back(platform_project_path.append(build_folder_names));
+            cr.non_existing_sources.push_back(platform_project_path.append(build_folder_names));
+          }
+          else
+          {
+            if (copy_mode == CopyMode::COPY_AND_CHECK_COURCES)
+            {
+              std::copy(
+                wildcard_files.begin(), wildcard_files.end(),
+                std::back_inserter(files_to_be_copied));
+            }
           }
         }
       }
-    }
-  }
 
-  if (!non_existing_sources.empty())
-  {
-    return tl::make_unexpected(non_existing_sources);
-  }
-
-  return true;
-}
-
-tl::expected<bool, cbf::ErrorReport> cbf::copy(const cbf::CopyBuildedFiles& cbf)
-{
-  cbf::ErrorReport err;
-
-  for (const auto& product : cbf.products)
-  {
-    for (const auto& platform : product.second.platforms)
-    {
-      if (!safe_exists(platform.src_root_path))
+      if (copy_mode == CopyMode::COPY_AND_CHECK_COURCES)
       {
-        err.non_existing_sources.push_back(platform.src_root_path);
-        continue;
-      }
-
-      for (const auto& plaform_specific_file : platform.platform_specific_files)
-      {
-        const auto full_path = platform.src_root_path / plaform_specific_file;
-        if (!safe_exists(full_path))
+        logger->info(
+          "Files to be copied ({}) [Product: '{}',\t Src: '{}']", files_to_be_copied.size(),
+          product.first, platform.src_root_path.string());
+        for (auto const& file : files_to_be_copied)
         {
-          err.non_existing_sources.push_back(full_path);
-        }
-      }
-
-      // Check default projects, but only for defined products
-      for (const auto& projects : cbf.default_projects)
-      {
-        if (cbf.products.count(projects.first) == 0)
-        {
-          // Skip default project which are not used
-          continue;
-        }
-        for (const auto& project : projects.second.projects)
-        {
-          const auto platform_project_paths = get_platform_project_path(project, platform);
-
-          bool found = false;
-          // In one of [Rel15, Rel015] find at least one file
-          for (auto const& platform_project_path : platform_project_paths)
+          try
           {
-            // If path contains wildcard check if at last one file with that extension exists
-            if (platform_project_path.stem() == "*")
-            {
-              // at least one file with extension must exits
-              const auto parent_path =
-                fs::path(platform.src_root_path / platform_project_path).parent_path();
-
-              if (safe_exists(parent_path))
-              {
-                for (auto& p : fs::directory_iterator(parent_path))
-                {
-                  if (p.is_regular_file())
-                  {
-                    if (p.path().extension() == platform_project_path.extension())
-                    {
-                      found = true;
-                      break;
-                    }
-                  }
-                }
-              }
-              else
-              {
-                err.non_existing_sources.push_back(parent_path);
-              }
-            }
-            // If we have fixed file, just check if not exists.
-            else if (!safe_exists(platform_project_path))
-            {
-              err.non_existing_sources.push_back(platform_project_path);
-            }
-          }  // END In one of [Rel15, Rel015]
-          if (!found)
+            fs::create_directories(platform.dst_folder_path);
+          }
+          catch (const std::exception&)
           {
-            // \\v-w1064u-bld7\SVN2017
-            auto platform_project_path = platform.src_root_path;
-            // \\v-w1064u-bld7\SVN2017\CGSA_TC\ARX\TC_SweptPath
-            platform_project_path /= platform_project_paths.front().parent_path().parent_path();
-
-            std::string build_folder_names;
-            for (auto const& build_folder_name : platform.build_folder_names)
-            {
-              build_folder_names.append(build_folder_name.string()).append(",");
-            }
-            // remove last ","
-            build_folder_names.pop_back();
-
-            // E.g.: \\v-w1064u-bld7\SVN2017\CGSA_TC\ARX\TC_SweptPath\Rel14u3x64,RelC2018x64
-            err.non_existing_sources.push_back(platform_project_path.append(build_folder_names));
+            logger->error("Can not create folder: {}", platform.dst_folder_path.string());
+          }
+          try
+          {
+            fs::copy(
+              file, platform.dst_folder_path, std::filesystem::copy_options::overwrite_existing);
+            cr.succeeded.emplace_back(CopyReport::FromTo{file, platform.dst_folder_path});
+          }
+          catch (const std::exception& e)
+          {
+            logger->error("{}", e.what());
+            cr.failed.push_back(file);
           }
         }
       }
-    }
-  }
+    }  // End for platform
+  }    // End for project
 
-  if (!err.non_existing_sources.empty() || !err.copy_failed.empty())
-  {
-    return tl::make_unexpected(err);
-  }
-
-  return true;
+  return cr;
 }

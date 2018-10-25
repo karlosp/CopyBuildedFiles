@@ -10,6 +10,19 @@ namespace fs = std::filesystem;
 // time find . -name "*.arx" | sed -r "s/\.\/(.*)\/Rel.*arx/\"\1\/*\/*\.arx\",/p" | sort | uniq
 int main(int argc, char* argv[])
 {
+  // Create logger
+  auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_st>();
+  auto file_sink =
+    std::make_shared<spdlog::sinks::basic_file_sink_st>("CopyBuildedFiles_log.txt", true);
+  file_sink->set_level(spdlog::level::trace);
+
+  std::vector<spdlog::sink_ptr> sinks{console_sink, file_sink};
+  auto multi_sink = std::make_shared<spdlog::logger>("multi_sink", begin(sinks), end(sinks));
+  multi_sink->set_level(spdlog::level::debug);
+
+  // register it if you need to access it globally
+  // spdlog::register_logger(multi_sink);
+
   cxxopts::Options options(argv[0], " - example command line options");
 
   fs::path json_file;
@@ -34,7 +47,7 @@ int main(int argc, char* argv[])
 
       if (!fs::exists(json_file))
       {
-        spdlog::error("Json file '{}' does not exists.", json_file.string());
+        multi_sink->error("Json file '{}' does not exists.", json_file.string());
         return 1;
       }
     }
@@ -55,7 +68,7 @@ int main(int argc, char* argv[])
   }
   catch (const std::exception& e)
   {
-    spdlog::critical(
+    multi_sink->critical(
       "Error when parsing file '{}':\n'{}'! \nAborting!", json_file.string(), e.what());
     return 1;
   }
@@ -63,44 +76,56 @@ int main(int argc, char* argv[])
   cbf::CopyBuildedFiles copy_build_files;
   cbf::from_json(settings, copy_build_files);
 
-  auto check_sources_result = cbf::check_sources(copy_build_files);
-  if (!check_sources_result)
+  auto copy_report =
+    cbf::copy_check_sources(copy_build_files, multi_sink, cbf::CopyMode::ONLY_CHECK_SOURCES);
+  if (!copy_report.non_existing_sources.empty())
   {
-    std::string error_msg = fmt::format("Following source files foes not exist ({}):\n", check_sources_result.error().size());
-    for (const auto& file : check_sources_result.error())
+    std::string error_msg = fmt::format(
+      "Following source files foes not exist ({}):\n", copy_report.non_existing_sources.size());
+    for (const auto& file : copy_report.non_existing_sources)
     {
       error_msg.append(file.string()).append("\n");
     }
-    spdlog::critical("Error: {}\n\nAborting!", error_msg);
+    multi_sink->critical("Error: {}\n\nAborting!", error_msg);
     return 0;
   }
   else
   {
-    spdlog::info("All source files exists!");
-  }
+    multi_sink->info("All source files exists!");
+    multi_sink->info("Start copying, this can take awhile ... ");
+    const auto copy_report = cbf::copy_check_sources(copy_build_files, multi_sink);
 
-  /*  auto console = spdlog::stdout_color_mt("console");
-    spdlog::info("Welcome to spdlog version {}.{}.{} !", SPDLOG_VER_MAJOR, SPDLOG_VER_MINOR,
-    SPDLOG_VER_PATCH); console->info("Welcome to spdlog!"); std::string s = fmt::format("{0}{1}{0}",
-    "abra", "cad"); console->error("Some error message with arg: {}", s);
+#ifdef _DEBUG
+    multi_sink->debug("In debug mode!");
+#else
+    // Do not write debug information in console if not in DEBUG mode
+    console_sink->set_level(spdlog::level::info);
+#endif
 
-    auto err_logger = spdlog::stderr_color_mt("stderr");
-    err_logger->error("Some error message");
-    std::ifstream i("../copy.json");
-    json copy_json;
-    i >> copy_json;
-
-
-    std::cout << copy_json.dump(2) << "\n\n\n";
-
-    for (auto& j : copy_json["products"])
+    const auto not_copied_txt =
+      fmt::format("Files that were not copied ({}):", copy_report.failed.size());
+    if (copy_report.failed.empty())
     {
-      std::cout << j.dump(2) << "\n";
+      // We just want to inform, that there were no errors
+      multi_sink->info(not_copied_txt);
+    }
+    else
+    {
+      multi_sink->error(not_copied_txt);
+    }
+    for (auto const& file : copy_report.failed)
+    {
+      multi_sink->debug("{}", file.string());
     }
 
-    for (auto& j : copy_json)
+    multi_sink->info("Copy succeeded ({})!", copy_report.succeeded.size());
+    multi_sink->debug("Succeeded list");
+    int counter = 0;
+    for (auto const& from_to : copy_report.succeeded)
     {
-      std::cout << j << "\n";
-    }*/
+      multi_sink->debug("{:>3} {} => {}", ++counter, from_to.from.string(), from_to.to.string());
+    }
+  }
+
   return 0;
 }
