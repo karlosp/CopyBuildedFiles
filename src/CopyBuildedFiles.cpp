@@ -53,6 +53,39 @@ bool safe_exists(std::filesystem::path const& p)
   return false;
 }
 
+// E.g:  "UrbanoInterface/arx/VS2015u3_64/*.arx"
+// If path contains no wild cards returns unmodified path.
+std::vector<fs::path> list_wildcard_files(fs::path const& path)
+{
+  std::vector<fs::path> files;
+
+  if (path.stem() == "*")
+  {
+    // at least one file with extension must exits
+    const auto parent_path = fs::path(path).parent_path();
+
+    if (safe_exists(parent_path))
+    {
+      for (auto& file : fs::directory_iterator(parent_path))
+      {
+        if (file.is_regular_file())
+        {
+          if (file.path().extension() == path.extension())
+          {
+            files.push_back(file);
+          }
+        }
+      }
+    }
+  }
+  else
+  {
+    files.push_back(path);
+  }
+
+  return files;
+}
+
 tl::expected<bool, std::vector<std::filesystem::path>> cbf::check_sources(
   const cbf::CopyBuildedFiles& cbf)
 {
@@ -70,11 +103,12 @@ tl::expected<bool, std::vector<std::filesystem::path>> cbf::check_sources(
 
       for (const auto& plaform_specific_file : platform.platform_specific_files)
       {
-        const auto full_path = platform.src_root_path / plaform_specific_file;
+        const auto absolute_path = platform.src_root_path / plaform_specific_file;
+        const auto full_path = list_wildcard_files(absolute_path);
 
-        if (!safe_exists(full_path))
+        if (full_path.empty())
         {
-          non_existing_sources.push_back(full_path);
+          non_existing_sources.push_back(absolute_path);
         }
       }
 
@@ -83,52 +117,24 @@ tl::expected<bool, std::vector<std::filesystem::path>> cbf::check_sources(
       {
         if (cbf.products.count(projects.first) == 0)
         {
-          // Skip default project which are not used
+          // Skip default_project which are not used
           continue;
         }
         for (const auto& project : projects.second.projects)
         {
           const auto platform_project_paths = get_platform_project_path(project, platform);
 
-          bool found = false;
+          std::vector<fs::path> wildcard_files;
           // In one of [Rel15, Rel015] find at least one file
           for (auto const& platform_project_path : platform_project_paths)
           {
-            // If path contains wildcard check if at last one file with that extension exists
-            if (platform_project_path.stem() == "*")
-            {
-              // at least one file with extension must exits
-              const auto parent_path =
-                fs::path(platform.src_root_path / platform_project_path).parent_path();
-              try
-              {
-                if (safe_exists(parent_path))
-                {
-                  for (auto& p : fs::directory_iterator(parent_path))
-                  {
-                    if (p.is_regular_file())
-                    {
-                      if (p.path().extension() == platform_project_path.extension())
-                      {
-                        found = true;
-                        break;
-                      }
-                    }
-                  }
-                }
-              }
-              catch (const std::exception&)
-              {
-                non_existing_sources.push_back(parent_path);
-              }
-            }
-            // If we have fixed file, just check if not exists.
-            else if (!safe_exists(platform_project_path))
-            {
-              non_existing_sources.push_back(platform_project_path);
-            }
+            const auto tmp_files =
+              list_wildcard_files(platform.src_root_path / platform_project_path);
+            std::copy(tmp_files.begin(), tmp_files.end(), std::back_inserter(wildcard_files));
+
           }  // END In one of [Rel15, Rel015]
-          if (!found)
+
+          if (wildcard_files.empty())
           {
             // \\v-w1064u-bld7\SVN2017
             auto platform_project_path = platform.src_root_path;
@@ -204,24 +210,22 @@ tl::expected<bool, cbf::ErrorReport> cbf::copy(const cbf::CopyBuildedFiles& cbf)
               // at least one file with extension must exits
               const auto parent_path =
                 fs::path(platform.src_root_path / platform_project_path).parent_path();
-              try
+
+              if (safe_exists(parent_path))
               {
-                if (safe_exists(parent_path))
+                for (auto& p : fs::directory_iterator(parent_path))
                 {
-                  for (auto& p : fs::directory_iterator(parent_path))
+                  if (p.is_regular_file())
                   {
-                    if (p.is_regular_file())
+                    if (p.path().extension() == platform_project_path.extension())
                     {
-                      if (p.path().extension() == platform_project_path.extension())
-                      {
-                        found = true;
-                        break;
-                      }
+                      found = true;
+                      break;
                     }
                   }
                 }
               }
-              catch (const std::exception&)
+              else
               {
                 err.non_existing_sources.push_back(parent_path);
               }
