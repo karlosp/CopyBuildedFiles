@@ -11,7 +11,8 @@
           ],
           "use_default_projects": true,
           "platform_specific_files": [
-            "UrbanoInterface/arx/VS2015u3_64/ARSXUrbanoInterface.arx"
+            "UrbanoInterface/arx/VS2015u3_64/ARSXUrbanoInterface.arx",
+             "UrbanoInterface/arx/VS2015u3_64/*.arx"
           ],
           "dst_folder_path": "\\\\V-W764-ISHLD\\CGSA2017\\CGSplus\\Program Data(x64)\\ACAD 2018"
         },

@@ -104,9 +104,16 @@ inline void from_json(const json& root, cbf::CopyBuildedFiles& cbf)
   }
 }
 
-// Check if all source files exists
+
+struct ErrorReport
+{
+  std::vector<fs::path> non_existing_sources;
+  std::vector<fs::path> copy_failed;
+};
+
+// Check if all source files exists, if not, returns paths of those who do not exists
 tl::expected<bool, std::vector<std::filesystem::path>> check_sources(
   const cbf::CopyBuildedFiles& cbf);
 
-inline void copy(const cbf::CopyBuildedFiles& cbf);
+tl::expected<bool, ErrorReport> copy(const cbf::CopyBuildedFiles& cbf);
 }  // namespace cbf
