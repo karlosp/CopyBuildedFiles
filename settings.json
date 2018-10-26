@@ -2,12 +2,48 @@
   "products": {
     "CGSplus": {
       "platforms": {
+        "ACAD 2013": {
+          "src_root_path": "\\\\v-w764u-bld3\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\CGSplus\\Program Data(x64)\\ACAD 2013"
+        },
+        "ACAD 2014": {
+          "src_root_path": "\\\\v-w764u-bld3\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\CGSplus\\Program Data(x64)\\ACAD 2014"
+        },
+        "ACAD 2015": {
+          "src_root_path": "\\\\v-w764u-bld4\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\CGSplus\\Program Data(x64)\\ACAD 2015"
+        },
+        "ACAD 2016": {
+          "src_root_path": "\\\\v-w764u-bld4\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\CGSplus\\Program Data(x64)\\ACAD 2016"
+        },
+        "ACAD 2017": {
+          "src_root_path": "\\\\v-w1064u-bld6\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\CGSplus\\Program Data(x64)\\ACAD 2017"
+        },
         "ACAD 2018": {
           "src_root_path": "\\\\v-w1064u-bld7\\SVN2017",
           "build_folder_names": [
-            "Rel14u3",
+            "Rel014u3x64",
             "Rel14u3x64",
-            "RelC2018x64"
+            "RelC2018x64",
+            "RelCB14u3x64"
           ],
           "use_default_projects": true,
           "platform_specific_files": [
@@ -18,10 +54,10 @@
         "ACAD 2019": {
           "src_root_path": "\\\\v-w1064u-bld8\\SVN2017",
           "build_folder_names": [
-            "Rel15",
-            "Rel15x64",
             "Rel015x64",
-            "RelC2019x64"
+            "Rel15x64",
+            "RelC2019x64",
+            "RelCB15x64"
           ],
           "use_default_projects": true,
           "platform_specific_files": [
@@ -30,6 +66,337 @@
             "CGSAPPS/ARX/Cgsa_LandXML11/dll-LandXML/x64/VS2015/*.dll"
           ],
           "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\CGSplus\\Program Data(x64)\\ACAD 2019"
+        },
+        "BCAD V13": {
+          "src_root_path": "\\\\v-w764u-bld3\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\CGSplus\\Program Data(BRICSx64)\\BRICSCAD v13"
+        },
+        "BCAD V14": {
+          "src_root_path": "\\\\v-w764u-bld3\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\CGSplus\\Program Data(BRICSx64)\\BRICSCAD v14"
+        },
+        "BCAD V15": {
+          "src_root_path": "\\\\v-w764u-bld3\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\CGSplus\\Program Data(BRICSx64)\\BRICSCAD v15"
+        },
+        "BCAD V16": {
+          "src_root_path": "\\\\v-w764u-bld5\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\CGSplus\\Program Data(BRICSx64)\\BRICSCAD v16"
+        },
+        "BCAD V17": {
+          "src_root_path": "\\\\v-w764u-bld5\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\CGSplus\\Program Data(BRICSx64)\\BRICSCAD v17"
+        },
+        "BCAD V18": {
+          "src_root_path": "\\\\v-w764u-bld5\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\CGSplus\\Program Data(BRICSx64)\\BRICSCAD v18"
+        }
+      }
+    },
+    "Naviate": {
+      "platforms": {
+        "ACAD 2014": {
+          "src_root_path": "\\\\v-w764u-bld3\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Naviate\\Program Data(x64)\\ACAD 2014"
+        },
+        "ACAD 2015": {
+          "src_root_path": "\\\\v-w764u-bld4\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Naviate\\Program Data(x64)\\ACAD 2015"
+        },
+        "ACAD 2016": {
+          "src_root_path": "\\\\v-w764u-bld4\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Naviate\\Program Data(x64)\\ACAD 2016"
+        },
+        "ACAD 2017": {
+          "src_root_path": "\\\\v-w1064u-bld6\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Naviate\\Program Data(x64)\\ACAD 2017"
+        },
+        "ACAD 2018": {
+          "src_root_path": "\\\\v-w1064u-bld7\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Naviate\\Program Data(x64)\\ACAD 2018"
+        },
+        "ACAD 2019": {
+          "src_root_path": "\\\\v-w1064u-bld8\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Naviate\\Program Data(x64)\\ACAD 2019"
+        }
+      }
+    },
+    "CGSCivil3DTools": {
+      "platforms": {
+        "ACAD 2013": {
+          "src_root_path": "\\\\v-w764u-bld3\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Naviate\\Program Data(x64)\\ACAD 2013"
+        },
+        "ACAD 2014": {
+          "src_root_path": "\\\\v-w764u-bld3\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Naviate\\Program Data(x64)\\ACAD 2014"
+        },
+        "ACAD 2015": {
+          "src_root_path": "\\\\v-w764u-bld4\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Naviate\\Program Data(x64)\\ACAD 2015"
+        },
+        "ACAD 2016": {
+          "src_root_path": "\\\\v-w764u-bld4\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Naviate\\Program Data(x64)\\ACAD 2016"
+        },
+        "ACAD 2017": {
+          "src_root_path": "\\\\v-w1064u-bld6\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Naviate\\Program Data(x64)\\ACAD 2017"
+        },
+        "ACAD 2018": {
+          "src_root_path": "\\\\v-w1064u-bld7\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Naviate\\Program Data(x64)\\ACAD 2018"
+        },
+        "ACAD 2019": {
+          "src_root_path": "\\\\v-w1064u-bld8\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Naviate\\Program Data(x64)\\ACAD 2019"
+        }
+      }
+    },
+    "Autosign": {
+      "platforms": {
+        "ACAD 2013": {
+          "src_root_path": "\\\\v-w764u-bld3\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Autosign\\Program Data(x64)\\ACAD 2013"
+        },
+        "ACAD 2014": {
+          "src_root_path": "\\\\v-w764u-bld3\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Autosign\\Program Data(x64)\\ACAD 2014"
+        },
+        "ACAD 2015": {
+          "src_root_path": "\\\\v-w764u-bld4\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Autosign\\Program Data(x64)\\ACAD 2015"
+        },
+        "ACAD 2016": {
+          "src_root_path": "\\\\v-w764u-bld4\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Autosign\\Program Data(x64)\\ACAD 2016"
+        },
+        "ACAD 2017": {
+          "src_root_path": "\\\\v-w1064u-bld6\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Autosign\\Program Data(x64)\\ACAD 2017"
+        },
+        "ACAD 2018": {
+          "src_root_path": "\\\\v-w1064u-bld7\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Autosign\\Program Data(x64)\\ACAD 2018"
+        },
+        "ACAD 2019": {
+          "src_root_path": "\\\\v-w1064u-bld8\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Autosign\\Program Data(x64)\\ACAD 2019"
+        },
+        "BCAD V13": {
+          "src_root_path": "\\\\v-w764u-bld3\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Autosign\\Program Data(BRICSx64)\\BRICSCAD v13"
+        },
+        "BCAD V14": {
+          "src_root_path": "\\\\v-w764u-bld3\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Autosign\\Program Data(BRICSx64)\\BRICSCAD v14"
+        },
+        "BCAD V15": {
+          "src_root_path": "\\\\v-w764u-bld3\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Autosign\\Program Data(BRICSx64)\\BRICSCAD v15"
+        },
+        "BCAD V16": {
+          "src_root_path": "\\\\v-w764u-bld5\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Autosign\\Program Data(BRICSx64)\\BRICSCAD v16"
+        },
+        "BCAD V17": {
+          "src_root_path": "\\\\v-w764u-bld5\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Autosign\\Program Data(BRICSx64)\\BRICSCAD v17"
+        },
+        "BCAD V18": {
+          "src_root_path": "\\\\v-w764u-bld5\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Autosign\\Program Data(BRICSx64)\\BRICSCAD v18"
+        }
+      }
+    },
+    "Autopath": {
+      "platforms": {
+        "ACAD 2013": {
+          "src_root_path": "\\\\v-w764u-bld3\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Autopath\\Program Data(x64)\\ACAD 2013"
+        },
+        "ACAD 2014": {
+          "src_root_path": "\\\\v-w764u-bld3\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Autopath\\Program Data(x64)\\ACAD 2014"
+        },
+        "ACAD 2015": {
+          "src_root_path": "\\\\v-w764u-bld4\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Autopath\\Program Data(x64)\\ACAD 2015"
+        },
+        "ACAD 2016": {
+          "src_root_path": "\\\\v-w764u-bld4\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Autopath\\Program Data(x64)\\ACAD 2016"
+        },
+        "ACAD 2017": {
+          "src_root_path": "\\\\v-w1064u-bld6\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Autopath\\Program Data(x64)\\ACAD 2017"
+        },
+        "ACAD 2018": {
+          "src_root_path": "\\\\v-w1064u-bld7\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Autopath\\Program Data(x64)\\ACAD 2018"
+        },
+        "ACAD 2019": {
+          "src_root_path": "\\\\v-w1064u-bld8\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Autopath\\Program Data(x64)\\ACAD 2019"
+        },
+        "BCAD V13": {
+          "src_root_path": "\\\\v-w764u-bld3\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Autopath\\Program Data(BRICSx64)\\BRICSCAD v13"
+        },
+        "BCAD V14": {
+          "src_root_path": "\\\\v-w764u-bld3\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Autopath\\Program Data(BRICSx64)\\BRICSCAD v14"
+        },
+        "BCAD V15": {
+          "src_root_path": "\\\\v-w764u-bld3\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Autopath\\Program Data(BRICSx64)\\BRICSCAD v15"
+        },
+        "BCAD V16": {
+          "src_root_path": "\\\\v-w764u-bld5\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Autopath\\Program Data(BRICSx64)\\BRICSCAD v16"
+        },
+        "BCAD V17": {
+          "src_root_path": "\\\\v-w764u-bld5\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Autopath\\Program Data(BRICSx64)\\BRICSCAD v17"
+        },
+        "BCAD V18": {
+          "src_root_path": "\\\\v-w764u-bld5\\SVN2017",
+          "build_folder_names": [],
+          "use_default_projects": true,
+          "platform_specific_files": [],
+          "dst_folder_path": "d:\\V-W764-ISHLD\\CGSA2017\\Autopath\\Program Data(BRICSx64)\\BRICSCAD v18"
         }
       }
     }
