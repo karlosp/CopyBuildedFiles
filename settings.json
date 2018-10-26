@@ -40,6 +40,7 @@
         "ACAD 2018": {
           "src_root_path": "\\\\v-w1064u-bld7\\SVN2017",
           "build_folder_names": [
+            "Rel14u3",
             "Rel014u3x64",
             "Rel14u3x64",
             "RelC2018x64",
@@ -54,6 +55,7 @@
         "ACAD 2019": {
           "src_root_path": "\\\\v-w1064u-bld8\\SVN2017",
           "build_folder_names": [
+            "Rel15",
             "Rel015x64",
             "Rel15x64",
             "RelC2019x64",

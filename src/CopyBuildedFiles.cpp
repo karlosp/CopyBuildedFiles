@@ -123,15 +123,10 @@ cbf::CopyReport cbf::copy_check_sources(
       }
 
       // Check default projects, but only for defined products
-      for (const auto& projects : cbf.default_projects)
+      if (cbf.default_projects.count(product.first))      
+      for (const auto& project : cbf.default_projects.at(product.first).projects)
       {
-        if (cbf.products.count(projects.first) == 0)
-        {
-          // Skip default_project which are not used
-          continue;
-        }
-        for (const auto& project : projects.second.projects)
-        {
+        
           const auto platform_project_paths = get_platform_project_path(project, platform);
 
           std::vector<fs::path> wildcard_files;
@@ -144,7 +139,7 @@ cbf::CopyReport cbf::copy_check_sources(
 
           }  // END In one of [Rel15, Rel015]
 
-          if (wildcard_files.empty())
+          if (wildcard_files.empty() && !platform_project_paths.empty())
           {
             // \\v-w1064u-bld7\SVN2017
             auto platform_project_path = platform.src_root_path;
@@ -171,7 +166,7 @@ cbf::CopyReport cbf::copy_check_sources(
                 std::back_inserter(files_to_be_copied));
             }
           }
-        }
+        
       }
 
       if (copy_mode == CopyMode::COPY_AND_CHECK_COURCES)
