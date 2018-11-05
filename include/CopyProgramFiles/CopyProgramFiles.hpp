@@ -6,15 +6,6 @@ namespace cbf
 using nlohmann::json;
 namespace fs = std::filesystem;
 
-inline json get_untyped(const json& j, const char* property)
-{
-  if (j.find(property) != j.end())
-  {
-    return j.at(property).get<json>();
-  }
-  return json();
-}
-
 struct DefaultProjects
 {
   std::vector<std::string> projects;
@@ -71,14 +62,12 @@ inline void from_json(const json& root, cbf::CopyProgramFiles& cbf)
   for (auto default_project = default_projects.cbegin(); default_project != default_projects.cend();
        ++default_project)
   {
-    // std::cout << default_project.key() << "\n";
     from_json(default_project.value(), cbf.default_projects[default_project.key()]);
   }
 
   const auto products = root["products"];
   for (auto product = products.cbegin(); product != products.cend(); ++product)
   {
-    //std::cout << product.key() << "\n";
     const auto product_platforms = product.value().at("platforms");
 
     for (auto product_platform = product_platforms.cbegin();
@@ -87,8 +76,6 @@ inline void from_json(const json& root, cbf::CopyProgramFiles& cbf)
       cbf::Platform platform;
       from_json(product_platform.value(), platform);
       cbf.products[product.key()].platforms.emplace_back(std::move(platform));
-      // from_json(product.value(), cbf.products[product.key()]);
-      // cbf.products[product.key()].platforms.push_back(&cbf.platforms.at(product_platform.key()));
     }
   }
 }
