@@ -1,6 +1,6 @@
 #include "StdAfx.h"
 
-#include "CopyBuildedFiles/CopyBuildedFiles.hpp"
+#include "CopyProgramFiles/CopyProgramFiles.hpp"
 
 // for convenience
 using json = nlohmann::json;
@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
   // Create logger
   auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_st>();
   auto file_sink =
-    std::make_shared<spdlog::sinks::basic_file_sink_st>("CopyBuildedFiles_log.txt", true);
+    std::make_shared<spdlog::sinks::basic_file_sink_st>("CopyProgramFiles_log.txt", true);
   file_sink->set_level(spdlog::level::trace);
 
   std::vector<spdlog::sink_ptr> sinks{console_sink, file_sink};
@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
     if (result.count("json"))
     {
       json_file = result["json"].as<std::string>();
-      std::cout << "Selected json file: " << json_file << "\n";
+      std::cout << "Selected json file: '" << json_file.string() << "'\n";
 
       if (!fs::exists(json_file))
       {
@@ -73,11 +73,11 @@ int main(int argc, char* argv[])
     return 1;
   }
 
-  cbf::CopyBuildedFiles copy_build_files;
-  cbf::from_json(settings, copy_build_files);
+  cbf::CopyProgramFiles copy_program_files;
+  cbf::from_json(settings, copy_program_files);
 
   auto copy_report =
-    cbf::copy_check_sources(copy_build_files, multi_sink, cbf::CopyMode::ONLY_CHECK_SOURCES);
+    cbf::copy_check_sources(copy_program_files, multi_sink, cbf::CopyMode::ONLY_CHECK_SOURCES);
   if (!copy_report.non_existing_sources.empty())
   {
     std::string error_msg = fmt::format(
@@ -93,7 +93,7 @@ int main(int argc, char* argv[])
   {
     multi_sink->info("All source files exists!");
     multi_sink->info("Start copying, this can take awhile ... ");
-    const auto copy_report = cbf::copy_check_sources(copy_build_files, multi_sink);
+    const auto copy_report = cbf::copy_check_sources(copy_program_files, multi_sink);
 
 #ifdef _DEBUG
     multi_sink->debug("In debug mode!");

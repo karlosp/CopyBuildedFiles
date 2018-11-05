@@ -34,7 +34,7 @@ struct Product
   std::vector<Platform> platforms;
 };
 
-struct CopyBuildedFiles
+struct CopyProgramFiles
 {
   std::unordered_map<std::string, DefaultProjects> default_projects;
   std::unordered_map<std::string, Product> products;
@@ -65,7 +65,7 @@ inline void from_json(const json& j, cbf::DefaultProjects& default_project)
 
 inline void from_json(const json& j, cbf::Product& product) { int a = 0; }
 
-inline void from_json(const json& root, cbf::CopyBuildedFiles& cbf)
+inline void from_json(const json& root, cbf::CopyProgramFiles& cbf)
 {
   const auto default_projects = root["default_projects"];
   for (auto default_project = default_projects.cbegin(); default_project != default_projects.cend();
@@ -78,7 +78,7 @@ inline void from_json(const json& root, cbf::CopyBuildedFiles& cbf)
   const auto products = root["products"];
   for (auto product = products.cbegin(); product != products.cend(); ++product)
   {
-    std::cout << product.key() << "\n";
+    //std::cout << product.key() << "\n";
     const auto product_platforms = product.value().at("platforms");
 
     for (auto product_platform = product_platforms.cbegin();
@@ -113,7 +113,7 @@ enum class CopyMode
 
 // Check if all source files exists, if not, returns paths of those who do not exists
 CopyReport copy_check_sources(
-  const cbf::CopyBuildedFiles& cbf, std::shared_ptr<spdlog::logger> logger,
+  const cbf::CopyProgramFiles& cbf, std::shared_ptr<spdlog::logger> logger,
   cbf::CopyMode copy_mode = CopyMode::COPY_AND_CHECK_COURCES);
 
 }  // namespace cbf

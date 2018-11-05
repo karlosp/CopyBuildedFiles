@@ -1,7 +1,7 @@
 // clang-format off
 #include "StdAfx.h"
 // clang-format on
-#include "CopyBuildedFiles/CopyBuildedFiles.hpp"
+#include "CopyProgramFiles/CopyProgramFiles.hpp"
 
 namespace
 {
@@ -87,7 +87,7 @@ std::vector<fs::path> list_wildcard_files(fs::path const& path)
 }
 
 cbf::CopyReport cbf::copy_check_sources(
-  const cbf::CopyBuildedFiles& cbf, std::shared_ptr<spdlog::logger> logger, cbf::CopyMode copy_mode)
+  const cbf::CopyProgramFiles& cbf, std::shared_ptr<spdlog::logger> logger, cbf::CopyMode copy_mode)
 {
   CopyReport cr;
 
@@ -107,26 +107,34 @@ cbf::CopyReport cbf::copy_check_sources(
       for (const auto& plaform_specific_file : platform.platform_specific_files)
       {
         const auto absolute_path = platform.src_root_path / plaform_specific_file;
-        const auto full_path = list_wildcard_files(absolute_path);
+        const auto full_path_wildcard_files = list_wildcard_files(absolute_path);
 
-        if (full_path.empty())
+        if (full_path_wildcard_files.empty())
         {
           cr.non_existing_sources.push_back(absolute_path);
         }
         else
         {
+          for (auto const& full_path_wildcard_file : full_path_wildcard_files)
+          {
+            if (!safe_exists(full_path_wildcard_file))
+            {
+              cr.non_existing_sources.push_back(full_path_wildcard_file);
+            }
+          }
           if (copy_mode == CopyMode::COPY_AND_CHECK_COURCES)
           {
-            std::copy(full_path.begin(), full_path.end(), std::back_inserter(files_to_be_copied));
+            std::copy(
+              full_path_wildcard_files.begin(), full_path_wildcard_files.end(),
+              std::back_inserter(files_to_be_copied));
           }
         }
       }
 
       // Check default projects, but only for defined products
-      if (cbf.default_projects.count(product.first))      
-      for (const auto& project : cbf.default_projects.at(product.first).projects)
-      {
-        
+      if (cbf.default_projects.count(product.first))
+        for (const auto& project : cbf.default_projects.at(product.first).projects)
+        {
           const auto platform_project_paths = get_platform_project_path(project, platform);
 
           std::vector<fs::path> wildcard_files;
@@ -166,8 +174,7 @@ cbf::CopyReport cbf::copy_check_sources(
                 std::back_inserter(files_to_be_copied));
             }
           }
-        
-      }
+        }
 
       if (copy_mode == CopyMode::COPY_AND_CHECK_COURCES)
       {
